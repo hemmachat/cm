@@ -1,0 +1,66 @@
+Requirement 9
+
+First answer:
+select Name 
+from Salesperson 
+where SalespersonID in (
+	select SalespersonID 
+	from Orders 
+	where CustomerID = (select CustomerID from customer where Name like 'George')
+)
+
+
+Second answer:
+select Name 
+from Salesperson 
+where SalespersonID not in (
+	select SalespersonID 
+	from Orders 
+	where CustomerID = (select CustomerID from customer where Name like 'George')
+)
+
+
+Third answer:
+select Name 
+from Salesperson 
+where SalespersonID in (
+	select SalespersonID 
+	from Orders
+	group by SalespersonID
+	having count(*) >= 2
+)
+
+
+
+Requirement 10
+
+First answer:
+select top 1 Name 
+from (
+	select top 3 Name, Salary
+	from Salesperson
+	order by Salary desc) t
+order by Salary asc
+
+
+Second answer:
+if object_id('tempdb..#BigOrders') is not null drop table #BigOrders
+go
+
+create table #BigOrders
+(CustomerID int, TotalOrderValue money)
+go
+
+insert into #BigOrders 
+select CustomerID, sum(NumberOfUnits * CostOfUnit) TotalOrderValue 
+from Orders
+where NumberOfUnits * CostOfUnit > 1000
+group by CustomerID
+go
+
+
+Third answer:
+select year(OrderDate) OrderYear, month(OrderDate) OrderMonth, sum(NumberOfUnits * CostOfUnit) TotalOrderValue 
+from Orders
+group by year(OrderDate), month(OrderDate)
+order by year(OrderDate), month(OrderDate)
