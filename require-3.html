@@ -1,51 +1,98 @@
 <html>
-    <head>
-        <title>CM JS dev, requirement 8</title>
-        <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-        <script
+	<head>
+		<title>CM JS dev, requirement 8</title>
+		<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<link href="css/custom.css" rel="stylesheet">
+		<script
 			  src="https://code.jquery.com/jquery-3.3.1.min.js"
 			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-              crossorigin="anonymous">
-        </script>
-        <script>
-            $.ajax({
-                url: "test.jsonp",
-                dataType: "jsonp",
-                jsonpCallback: "logResults"
-              });
+			  crossorigin="anonymous">
+		</script>
+		<script	src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+		<script>
+			$(function() {
+				setupPage();
+				loadContent();
 
-              function jsonCallback(json){
-                console.log(json);
-              }              
-        </script>
-    </head>
-    <body>
-        <div class="container" style="padding-top:30px">
-            <div>
-                <p><a href="#">Load the current issues list</a></p>
-            </div>
-            <div id="results" style="display:none">
-                <!-- Each issue should be rendered with the following template -->
-                <div class="issue-template">
-                    <h3>Issue Title - Begin 10 minutes ago</h3> <!-- If status === Unresolved -->
-                    <h3>Issue Title - Resolved 10 minutes ago</h3> <!-- If status === Resolved -->
-                    <p>Issue description</p>
-                    <div style="padding-left:50px">
-                        <p>Updates:</p>
-                        <!-- Each update should be rendered with the following template -->
-                        <div class="update-template">                    
-                            <p>Update</p>
-                            <em>By Mat 10 minutes ago</em>
-                            <hr style="width:50%"/>
-                        </div>
-                    </div>
-                    <hr />
-                </div>
-                <!-- Render this if there are no issues returned -->
-                <div class="no-issues-template">
-                    Everybody is happy!
-                </div>
-            </div>
-        </div>
-    </body> 
+				function setupPage() {
+					$(document).ajaxStart(function() {
+						$("#wait").css("display", "block");
+					});
+	
+					$(document).ajaxComplete(function() {
+						$("#wait").css("display", "none");
+					});
+	
+					$('#btnLoad').click(function() {
+						clearContent();
+						loadContent();
+					});
+				}
+
+				function clearContent() {
+					$('#results').hide(200);
+				}
+
+				function loadContent() {
+					const renderContent = data => {
+						const createIssueItem = issue => {
+							const createUpdateItem = update => {
+								return `<div class="update-template">
+												<p>${update.update}</p>
+												<em>By ${update.by} ${moment(update.at).fromNow()}</em>
+												<hr style="width:50%"/>
+											</div>`;						
+							};
+							const updateItems = issue.updates.map(createUpdateItem);
+		
+							return html = `<div class="issue-template">
+									<h3>${issue.title} - ${issue.status === 'Unresolved' ? 'Begin ' + moment(issue.beganAt).fromNow(): 
+										'Resolved ' + moment(issue.resolvedAt).fromNow()}</h3>
+									<p>${issue.description}</p>
+									<div style="padding-left:50px">
+										<p>Updates:</p>
+										${updateItems.join('')}
+									</div>
+									<hr />
+								</div>`;					
+						}
+
+						const items = data.map(createIssueItem);
+
+						if (items.length > 0) {
+							$('#results').html(items.join(''));
+						}
+
+						$('#results').show(200);
+					};
+
+					const handleError = () => {
+						console.log("JSON error");
+					};
+
+					$.ajax({
+						url: "https://raw.githubusercontent.com/hemmachat/cm/master/data.json",
+						dataType: "json",
+						success: renderContent,
+						error: handleError
+					});
+				}
+			});
+
+		</script>
+	</head>
+	<body>
+		<div class="container" style="padding-top:30px">
+			<div id="wait"><img src='img/wait.gif' width="64" height="64" /><br>Loading..</div>
+			<div>
+				<p><a href="#" id="btnLoad">Load the current issues list</a></p>
+			</div>
+			<div id="results" style="display:none">
+				<!-- Render this if there are no issues returned -->
+				<div class="no-issues-template">
+					Everybody is happy!
+				</div>
+			</div>
+		</div>
+	</body> 
 </html>
