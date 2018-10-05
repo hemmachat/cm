@@ -41,20 +41,20 @@
 												<p>${update.update}</p>
 												<em>By ${update.by} ${moment(update.at).fromNow()}</em>
 												<hr style="width:50%"/>
-											</div>`;						
+										</div>`;						
 							};
 							const updateItems = issue.updates.map(createUpdateItem);
 		
-							return html = `<div class="issue-template">
-									<h3>${issue.title} - ${issue.status === 'Unresolved' ? 'Begin ' + moment(issue.beganAt).fromNow(): 
-										'Resolved ' + moment(issue.resolvedAt).fromNow()}</h3>
-									<p>${issue.description}</p>
-									<div style="padding-left:50px">
-										<p>Updates:</p>
-										${updateItems.join('')}
-									</div>
-									<hr />
-								</div>`;					
+							return `<div class="issue-template">
+										<h3>${issue.title} - ${issue.status === 'Unresolved' ? 'Begin ' + moment(issue.beganAt).fromNow(): 
+											'Resolved ' + moment(issue.resolvedAt).fromNow()}</h3>
+										<p>${issue.description}</p>
+										<div style="padding-left:50px">
+											<p>Updates:</p>
+											${updateItems.join('')}
+										</div>
+										<hr />
+									</div>`;					
 						}
 
 						const items = data.map(createIssueItem);
