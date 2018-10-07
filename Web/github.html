@@ -1,0 +1,98 @@
+<html>
+	<head>
+		<title>Github</title>
+		<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<link href="css/custom.css" rel="stylesheet">
+		<script
+			  src="https://code.jquery.com/jquery-3.3.1.min.js"
+			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+			  crossorigin="anonymous">
+		</script>
+		<script>
+			$(function() {
+				const githubUrl = 'https://api.github.com/repos/microsoft/dotnet/pulls';
+				const closedUrl = githubUrl + '\?state\=closed\&page\=1';
+				const openUrl = githubUrl + '\?state\=open\&page\=1';
+
+				setupPage();
+				loadContent(closedUrl);
+
+				function setupPage() {
+					$(document).ajaxStart(function() {
+						$("#wait").css("display", "block");
+					});
+	
+					$(document).ajaxComplete(function() {
+						$("#wait").css("display", "none");
+					});
+	
+					$('#btnClose').click(function() {
+						clearContent();
+						loadContent(closedUrl);
+					});
+
+					$('#btnOpen').click(function() {
+						clearContent();
+						loadContent(openUrl);
+					});	
+															
+				}
+
+				function clearContent() {
+					$('#results').hide(200);
+				}
+
+				function loadContent(jsonUrl) {
+					const renderContent = data => {
+						const bindMergeButton = url => {
+
+						}
+						
+						const prItems = item => {
+							return `<div class="item-template panel">
+										<h3>[${item.state}] - ${item.title} ${item.state == 'open' ? '<a href="#" id="btnMerge" class="btn">Merge</a>' : ''}</h3>
+										<p>${item.body}</p>
+									</div>`;					
+						}
+
+						const items = data.map(prItems);
+
+						if (items.length > 0) {
+							$('#results').html(items.join(''));
+						}
+
+						$('#results').show(200);
+					};
+
+					const handleError = () => {
+						console.log("JSON error: " + jsonUrl);
+						alert('Fail to load JSON from ' + jsonUrl);
+					};
+
+					$.ajax({
+						url: jsonUrl,
+						dataType: "json",
+						success: renderContent,
+						error: handleError
+					});
+				}
+			});
+
+		</script>
+	</head>
+	<body>
+		<div class="container" style="padding-top:30px">
+			<div id="wait"><img src='img/wait.gif' width="64" height="64" /><br>Loading..</div>
+			<div>
+				<p><a href="#" id="btnClose" class="btn btn-primary">Closed Pull Request</a>
+					<a href="#" id="btnOpen" class="btn">Open Pull Request</a>
+				</p>
+			</div>
+			<div id="results" style="display:none">
+				<div class="no-issues-template">
+					No Pull Request
+				</div>
+			</div>
+		</div>
+	</body> 
+</html>
