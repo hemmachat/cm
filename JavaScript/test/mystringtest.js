@@ -38,6 +38,35 @@ describe('String polyfill functions', function() {
       it('should return false when the string not start with { first: \'Johnny\' }', function(){
         assert.equal(false, 'hang the dj'.startsWith({ first: 'Johnny' }));
       });
+
+      it('should return false when the string not start with null', function(){
+        assert.equal(false, 'hang the dj'.startsWith(null));
+      });      
+
+      it('should return false when the string not start with \'null\'', function(){
+        assert.equal(false, 'hang the dj'.startsWith('null'));
+      });    
+
+      it('should return false when the string not start with undefined', function(){
+        assert.equal(false, 'hang the dj'.startsWith(undefined));
+      });    
+
+      it('should return false when the string not start with \'undefined\'', function(){
+        assert.equal(false, 'hang the dj'.startsWith('undefined'));
+      });  
+
+      it('should return false when the string not start with Nan', function(){
+        assert.equal(false, 'hang the dj'.startsWith(Number.Nan));
+      });    
+
+      it('should return false when the string not start with false', function(){
+        assert.equal(false, 'hang the dj'.startsWith(false));
+      });  
+
+      it('should return false when the string not start with 0', function(){
+        assert.equal(false, 'hang the dj'.startsWith(0));
+      });  
+
     });
 
     describe('endsWith()', function() {
@@ -72,5 +101,34 @@ describe('String polyfill functions', function() {
         it('should return false when the string not end with { first: \'Johnny\' }', function(){
             assert.equal(false, 'hang the dj'.endsWith({ first: 'Johnny' }));
         });
+
+        it('should return false when the string not end with null', function(){
+          assert.equal(false, 'hang the dj'.endsWith(null));
+        });      
+  
+        it('should return false when the string not end with \'null\'', function(){
+          assert.equal(false, 'hang the dj'.endsWith('null'));
+        });    
+  
+        it('should return false when the string not end with undefined', function(){
+          assert.equal(false, 'hang the dj'.endsWith(undefined));
+        });    
+  
+        it('should return false when the string not end with \'undefined\'', function(){
+          assert.equal(false, 'hang the dj'.endsWith('undefined'));
+        });  
+
+        it('should return false when the string not end with NaN', function(){
+          assert.equal(false, 'hang the dj'.endsWith(Number.Nan));
+        });  
+
+        it('should return false when the string not end with false', function(){
+          assert.equal(false, 'hang the dj'.endsWith(false));
+        });  
+
+        it('should return false when the string not end with 0', function(){
+          assert.equal(false, 'hang the dj'.endsWith(0));
+        }); 
+
     });
 });
