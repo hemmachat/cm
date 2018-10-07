@@ -34,26 +34,25 @@
 				}
 
 				function loadContent() {
+					const jsonUrl = 'https://raw.githubusercontent.com/hemmachat/cm/master/Web/data.json';
 					const renderContent = data => {
 						const createIssueItem = issue => {
 							const createUpdateItem = update => {
-								return `<div class="update-template">
+								return `<div class="update-template well">
 												<p>${update.update}</p>
 												<em>By ${update.by} ${moment(update.at).fromNow()}</em>
-												<hr style="width:50%"/>
 										</div>`;						
 							};
 							const updateItems = issue.updates.map(createUpdateItem);
 		
-							return `<div class="issue-template">
+							return `<div class="issue-template panel">
 										<h3>${issue.title} - ${issue.status === 'Unresolved' ? 'Begin ' + moment(issue.beganAt).fromNow(): 
 											'Resolved ' + moment(issue.resolvedAt).fromNow()}</h3>
 										<p>${issue.description}</p>
-										<div style="padding-left:50px">
-											<p>Updates:</p>
+										<div>
+											<p><b>Updates:</b></p>
 											${updateItems.join('')}
 										</div>
-										<hr />
 									</div>`;					
 						}
 
@@ -67,11 +66,12 @@
 					};
 
 					const handleError = () => {
-						console.log("JSON error");
+						console.log("JSON error: " + jsonUrl);
+						alert('Fail to load JSON from ' + jsonUrl);
 					};
 
 					$.ajax({
-						url: "https://raw.githubusercontent.com/hemmachat/cm/master/data.json",
+						url: jsonUrl,
 						dataType: "json",
 						success: renderContent,
 						error: handleError
@@ -85,7 +85,7 @@
 		<div class="container" style="padding-top:30px">
 			<div id="wait"><img src='img/wait.gif' width="64" height="64" /><br>Loading..</div>
 			<div>
-				<p><a href="#" id="btnLoad">Load the current issues list</a></p>
+				<p><a href="#" id="btnLoad" class="btn btn-primary">Load the current issues list</a></p>
 			</div>
 			<div id="results" style="display:none">
 				<!-- Render this if there are no issues returned -->
