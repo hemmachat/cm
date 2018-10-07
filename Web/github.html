@@ -23,9 +23,10 @@
 				}
 			}
 
+			// this function is not complete as authentication is needed in order to merge
+			// https://developer.github.com/v3/pulls/#merge-a-pull-request-merge-button
+			// https://developer.github.com/v3/repos/merging/
 			function mergeCommit(jsonUrl) {
-// https://developer.github.com/v3/pulls/#merge-a-pull-request-merge-button
-// https://developer.github.com/v3/repos/merging/
 				$.ajax({
 					url: jsonUrl,
 					dataType: "json",
