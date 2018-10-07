@@ -9,8 +9,39 @@
 			  crossorigin="anonymous">
 		</script>
 		<script>
+			const githubUrl = 'https://api.github.com/repos/microsoft/dotnet/pulls';
+
+			function bindMergeButton(number, sha) {
+				var message = prompt("Please enter your commit message", "");
+
+				if (message) {
+					console.log(message);
+					console.log(number);
+					console.log(sha);
+					const mergeUrl = `${githubUrl}/${number}/merge?commit_title=${message}&sha=${sha}`;
+					mergeCommit(mergeUrl);
+				}
+			}
+
+			function mergeCommit(jsonUrl) {
+
+				$.ajax({
+					url: jsonUrl,
+					dataType: "json",
+					method: "PUT",
+					success: function (data, text) {
+						console.log(data);
+						alert(text);
+    				},
+					error: function (request, status, error) {
+						console.log(request.responseText);
+						console.log(jsonUrl);
+						alert('Cannot load from url: ' + jsonUrl);
+					}
+				});
+			}
+
 			$(function() {
-				const githubUrl = 'https://api.github.com/repos/microsoft/dotnet/pulls';
 				const closedUrl = githubUrl + '\?state\=closed\&page\=1';
 				const openUrl = githubUrl + '\?state\=open\&page\=1';
 
@@ -34,8 +65,7 @@
 					$('#btnOpen').click(function() {
 						clearContent();
 						loadContent(openUrl);
-					});	
-															
+					});									
 				}
 
 				function clearContent() {
@@ -44,13 +74,9 @@
 
 				function loadContent(jsonUrl) {
 					const renderContent = data => {
-						const bindMergeButton = url => {
-
-						}
-						
 						const prItems = item => {
 							return `<div class="item-template panel">
-										<h3>[${item.state}] - ${item.title} ${item.state == 'open' ? '<a href="#" id="btnMerge" class="btn">Merge</a>' : ''}</h3>
+										<h3>[${item.state}]${item.state == 'open' ? ` <a href="#" id="btnMerge" class="btn" onClick="bindMergeButton(${item.number}, '${item.head.sha}')">Merge</a>` : ''} - ${item.title}</h3>
 										<p>${item.body}</p>
 									</div>`;					
 						}
@@ -64,16 +90,15 @@
 						$('#results').show(200);
 					};
 
-					const handleError = () => {
-						console.log("JSON error: " + jsonUrl);
-						alert('Fail to load JSON from ' + jsonUrl);
-					};
-
 					$.ajax({
 						url: jsonUrl,
 						dataType: "json",
 						success: renderContent,
-						error: handleError
+						error: function (request, status, error) {
+							console.log(request.responseText);
+							console.log(jsonUrl);
+							alert('Cannot load from url: ' + jsonUrl);
+						}
 					});
 				}
 			});
