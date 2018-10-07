@@ -5,7 +5,7 @@ namespace CmLibrary
     public class StringLibrary
     {
         /// <summary>
-        /// Check if the string is null or empty string
+        /// Check if the string is null or empty string refer from mscorlib's source code https://github.com/Microsoft/referencesource/blob/master/mscorlib/system/string.cs
         /// This method is not an extension method of the existing String.IsNullOrEmpty() method because there is alredy a method that does the same thing.
         /// Extension method is mean to create something new for the existing class. For our case, we do not create new functionality.
         /// So, static method is more suitable.
