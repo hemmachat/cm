@@ -44,6 +44,7 @@ order by Salary asc
 
 
 Second answer:
+-- I believe you want to create a temp table #BigOrders to store some data
 if object_id('tempdb..#BigOrders') is not null drop table #BigOrders
 go
 
