@@ -59,6 +59,10 @@ describe('String polyfill functions', function() {
         assert.equal(false, 'hang the dj'.startsWith(Number.Nan));
       });    
 
+      it('should return false when the string not start with \'Nan\'', function(){
+        assert.equal(false, 'hang the dj'.startsWith('Nan'));
+      });   
+
       it('should return false when the string not start with false', function(){
         assert.equal(false, 'hang the dj'.startsWith(false));
       });  
@@ -120,6 +124,10 @@ describe('String polyfill functions', function() {
 
         it('should return false when the string not end with NaN', function(){
           assert.equal(false, 'hang the dj'.endsWith(Number.Nan));
+        });  
+
+        it('should return false when the string not end with \'NaN\'', function(){
+          assert.equal(false, 'hang the dj'.endsWith('Nan'));
         });  
 
         it('should return false when the string not end with false', function(){
