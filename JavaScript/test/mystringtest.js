@@ -7,6 +7,14 @@ describe('String polyfill functions', function() {
         assert.equal(true, 'hang the dj'.startsWith('hang'));
       });
 
+      it('should return true when the string start with \' hang\'', function(){
+        assert.equal(false, 'hang the dj'.startsWith(' hang'));
+      });
+
+      it('should return true when the string start with \' hang \'', function(){
+        assert.equal(false, 'hang the dj'.startsWith(' hang '));
+      });
+
       it('should return false when the string not start with \'Hang\'', function(){
         assert.equal(false, 'hang the dj'.startsWith('Hang'));
       });
@@ -76,6 +84,14 @@ describe('String polyfill functions', function() {
     describe('endsWith()', function() {
         it('should return true when the string end with \'dj\'', function(){
           assert.equal(true, 'hang the dj'.endsWith('dj'));
+        });
+
+        it('should return true when the string end with \'dj \'', function(){
+          assert.equal(false, 'hang the dj'.endsWith('dj '));
+        });
+
+        it('should return true when the string end with \' dj \'', function(){
+          assert.equal(false, 'hang the dj'.endsWith(' dj '));
         });
 
         it('should return false when the string not end with \'panic on the streets\'', function(){
